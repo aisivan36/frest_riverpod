@@ -5,10 +5,10 @@ import 'package:frest/utils/url.dart';
 import 'package:frest/widgets/loader.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-Future customDialog(context, {@required String clientId}) {
+Future<Widget?> customDialog(BuildContext context, {required String clientId}) {
   return showCupertinoModalBottomSheet(
     context: context,
-    builder: (BuildContext context, scrollController) => Container(
+    builder: (BuildContext context) => SizedBox(
       height: context.screenHeight(0.9),
       width: context.screenWidth(),
       child: Padding(
@@ -19,8 +19,8 @@ Future customDialog(context, {@required String clientId}) {
           withLocalStorage: true,
           hidden: true,
           appCacheEnabled: true,
-          initialChild: Container(
-            child: const Center(
+          initialChild: const SizedBox(
+            child: Center(
               child: Loader(),
             ),
           ),

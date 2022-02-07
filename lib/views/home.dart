@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:frest/models/repos_model.dart';
 import 'package:frest/models/token_model.dart';
 import 'package:frest/utils/margin.dart';
@@ -9,83 +8,82 @@ import 'package:frest/utils/theme.dart';
 import 'package:frest/view_models/home_vm.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class HomePage extends StatefulHookWidget {
-  final TokenModel tokenModel;
-  const HomePage(this.tokenModel);
+class HomePage extends StatefulHookConsumerWidget {
+  final TokenModel? tokenModel;
+  const HomePage({Key? key, this.tokenModel}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final providerMain = ChangeNotifierProvider((_) => HomeViewModel());
+class _HomePageState extends ConsumerState<HomePage> {
+  final providerMain = StateNotifierProvider((ref) => HomeViewModel());
 
   @override
   void initState() {
-    providerMain.read(context).getRepos(context, widget?.tokenModel?.accessToken);
+    ref
+        .read(providerMain.notifier)
+        .getRepos(context, widget.tokenModel!.accessToken!);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var provider = useProvider(providerMain);
+    var provider = ref.watch(providerMain.notifier);
     return Scaffold(
       backgroundColor: bgColor,
       body: !provider.isLoading
           ? Padding(
-              padding: EdgeInsets.symmetric(horizontal:30),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const YMargin(70),
+                  const YMargin(y: 70),
                   Text('Your Repos',
                       style: GoogleFonts.lato(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontWeight: FontWeight.w600,
                           color: white,
                           fontSize: 23,
                         ),
                       )),
-                  const YMargin(20),
+                  const YMargin(y: 20),
                   Flexible(
                     child: ListView(
-                      padding: EdgeInsets.all(0),
+                      padding: const EdgeInsets.all(0),
                       children: [
-                        const YMargin(30),
+                        const YMargin(y: 30),
                         if (provider.reposModel != null &&
-                            provider.reposModel.data.length > 0)
-                          for (var item in provider.reposModel.data)
-                            RepoWidget(item)
+                            provider.reposModel!.data!.isNotEmpty)
+                          for (var item in provider.reposModel!.data!)
+                            RepoWidget(repoItem: item)
                       ],
                     ),
                   ),
                 ],
               ),
             )
-          : Loader(),
+          : const Loader(),
     );
   }
 }
 
 class RepoWidget extends StatelessWidget {
-  const RepoWidget(
-    this.repoItem,
-  );
+  const RepoWidget({Key? key, this.repoItem}) : super(key: key);
 
-  final ReposModel repoItem;
+  final ReposModel? repoItem;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: context.screenWidth(0.8),
-      
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 30,
         top: 30,
         right: 15,
         bottom: 20,
       ),
-      margin: EdgeInsets.only(bottom: 30),
+      margin: const EdgeInsets.only(bottom: 30),
       decoration: BoxDecoration(
           color: darkGrey, borderRadius: BorderRadius.circular(5)),
       child: Column(
@@ -94,14 +92,14 @@ class RepoWidget extends StatelessWidget {
           Text(
             repoItem?.name ?? '',
             style: GoogleFonts.lato(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontWeight: FontWeight.w600,
                 color: white,
                 fontSize: 19,
               ),
             ),
           ),
-          const YMargin(7),
+          const YMargin(y: 7),
           Text(
             repoItem?.htmlUrl ?? '',
             style: GoogleFonts.sourceCodePro(
@@ -112,18 +110,18 @@ class RepoWidget extends StatelessWidget {
               ),
             ),
           ),
-          const YMargin(20),
+          const YMargin(y: 20),
           Text(
             repoItem?.description ?? '',
             style: GoogleFonts.lato(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontWeight: FontWeight.w400,
                 color: white,
                 fontSize: 14,
               ),
             ),
           ),
-          const YMargin(30),
+          const YMargin(y: 30),
           Row(
             children: [
               Flexible(
@@ -136,7 +134,7 @@ class RepoWidget extends StatelessWidget {
                     child: Text(
                       repoItem?.language ?? '',
                       style: GoogleFonts.lato(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontWeight: FontWeight.w400,
                           color: white,
                           fontSize: 12,
@@ -146,7 +144,7 @@ class RepoWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              const XMargin(20),
+              const XMargin(x: 20),
               Flexible(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(2),
@@ -157,7 +155,7 @@ class RepoWidget extends StatelessWidget {
                     child: Text(
                       repoItem?.license?.name ?? '',
                       style: GoogleFonts.lato(
-                        textStyle: TextStyle(
+                        textStyle: const TextStyle(
                           fontWeight: FontWeight.w400,
                           color: white,
                           fontSize: 12,

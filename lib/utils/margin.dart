@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class XMargin extends StatelessWidget {
-  final double x;
-  const XMargin(this.x);
+  final double? x;
+  const XMargin({Key? key, this.x}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SizedBox(width: x);
@@ -10,8 +10,8 @@ class XMargin extends StatelessWidget {
 }
 
 class YMargin extends StatelessWidget {
-  final double y;
-  const YMargin(this.y);
+  final double? y;
+  const YMargin({Key? key, this.y}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SizedBox(height: y);

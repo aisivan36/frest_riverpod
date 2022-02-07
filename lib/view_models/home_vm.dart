@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frest/core/api/auth.dart';
 import 'package:frest/models/repos_model.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class HomeViewModel extends ChangeNotifier {
+class HomeViewModel extends StateNotifier {
   bool isLoading = false;
-  ReposListModel reposModel;
+  ReposListModel? reposModel;
+
+  HomeViewModel({HomeViewModel? state}) : super(state);
 
   void getRepos(context, String token) async {
     try {
@@ -14,10 +17,10 @@ class HomeViewModel extends ChangeNotifier {
         reposModel = temp;
       }
       isLoading = false;
-      notifyListeners();
+      // notifyListeners();
     } catch (e) {
       isLoading = false;
-      notifyListeners();
+      // notifyListeners();
       print(e.toString());
     }
   }

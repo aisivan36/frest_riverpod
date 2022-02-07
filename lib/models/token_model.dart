@@ -1,7 +1,7 @@
 class TokenModel {
-  String accessToken;
-  String tokenType;
-  String scope;
+  String? accessToken;
+  String? tokenType;
+  String? scope;
 
   TokenModel({this.accessToken, this.tokenType, this.scope});
 
@@ -12,10 +12,10 @@ class TokenModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['access_token'] = this.accessToken;
-    data['token_type'] = this.tokenType;
-    data['scope'] = this.scope;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['access_token'] = accessToken;
+    data['token_type'] = tokenType;
+    data['scope'] = scope;
     return data;
   }
 }
